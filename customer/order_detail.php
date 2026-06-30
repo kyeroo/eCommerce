@@ -1,5 +1,235 @@
-<?php require_once '../config/database.php'; require_once '../includes/session.php'; require_login(); $u=current_user();
-$stmt=$pdo->prepare('SELECT o.*, p.status payment_status, p.paid_at, s.courier, s.service, s.tracking_number, s.status shipment_status FROM orders o LEFT JOIN payments p ON p.order_id=o.id LEFT JOIN shipments s ON s.order_id=o.id WHERE o.id=? AND o.user_id=?'); $stmt->execute([$_GET['id'] ?? 0,$u['id']]); $order=$stmt->fetch(); if(!$order) die('Pesanan tidak ditemukan.');
-$stmt=$pdo->prepare('SELECT oi.*, p.name, p.image FROM order_items oi JOIN products p ON p.id=oi.product_id WHERE oi.order_id=?'); $stmt->execute([$order['id']]); $items=$stmt->fetchAll();
+<?php
+
+require_once '../config/database.php';
+require_once '../includes/session.php';
+
+require_login();
+
+$u = current_user();
+
+$stmt = $pdo->prepare(
+    'SELECT
+        o.*,
+        p.status AS payment_status,
+        p.paid_at,
+        s.courier,
+        s.service,
+        s.tracking_number,
+        s.status AS shipment_status
+     FROM orders o
+     LEFT JOIN payments p
+        ON p.order_id = o.id
+     LEFT JOIN shipments s
+        ON s.order_id = o.id
+     WHERE o.id = ?
+        AND o.user_id = ?'
+);
+
+$stmt->execute([
+    $_GET['id'] ?? 0,
+    $u['id']
+]);
+
+$order = $stmt->fetch();
+
+if (!$order) {
+    die('Pesanan tidak ditemukan.');
+}
+
+$stmt = $pdo->prepare(
+    'SELECT
+        oi.*,
+        p.name,
+        p.image
+     FROM order_items oi
+     JOIN products p
+        ON p.id = oi.product_id
+     WHERE oi.order_id = ?'
+);
+
+$stmt->execute([
+    $order['id']
+]);
+
+$items = $stmt->fetchAll();
+
 ?>
-<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detail Pesanan</title><link rel="stylesheet" href="../css/bootstrap.css"><link rel="stylesheet" href="../css/liquid-glass.css"><link rel="stylesheet" href="../css/professional.css"><link rel="stylesheet" href="../css/professional.css"></head><body class="sub_page"><?php include '../includes/header.php'; ?><section class="section-pad"><div class="container"><div class="glass-panel mb-4"><h2 class="section-title">Invoice <?= htmlspecialchars($order['invoice_code']) ?></h2><p>Status order: <span class="status-pill"><?= $order['status'] ?></span></p><div class="row"><div class="col-md-4"><b>Pembayaran</b><p><?= htmlspecialchars($order['payment_method']) ?> · <?= htmlspecialchars($order['payment_status'] ?? '-') ?></p></div><div class="col-md-4"><b>Pengiriman</b><p><?= htmlspecialchars(($order['courier'] ?? '-') . ' ' . ($order['service'] ?? '')) ?><br>Resi: <?= htmlspecialchars($order['tracking_number'] ?? '-') ?></p></div><div class="col-md-4"><b>Alamat</b><p><?= htmlspecialchars($order['shipping_address']) ?></p></div></div></div><div class="glass-card p-4"><table class="table"><thead><tr><th>Produk</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr></thead><tbody><?php foreach($items as $i): ?><tr><td><img src="../<?= htmlspecialchars($i['image']) ?>" width="55"> <?= htmlspecialchars($i['name']) ?></td><td><?= $i['quantity'] ?></td><td>Rp <?= number_format($i['price'],0,',','.') ?></td><td>Rp <?= number_format($i['subtotal'],0,',','.') ?></td></tr><?php endforeach; ?></tbody></table><div class="text-right"><p>Subtotal: Rp <?= number_format($order['subtotal'],0,',','.') ?></p><p>Diskon: Rp <?= number_format($order['discount_amount'],0,',','.') ?></p><p>Ongkir: Rp <?= number_format($order['shipping_cost'],0,',','.') ?></p><h4>Total: Rp <?= number_format($order['total_amount'],0,',','.') ?></h4></div><a class="btn btn-outline-dark rounded-pill" href="orders.php">Kembali</a></div></div></section><?php include '../includes/footer.php'; ?>
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Detail Pesanan</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/liquid-glass.css">
+    <link rel="stylesheet" href="../css/professional.css">
+
+</head>
+
+<body class="sub_page">
+
+    <?php include '../includes/header.php'; ?>
+
+    <section class="section-pad">
+
+        <div class="container">
+
+            <div class="glass-panel mb-4">
+
+                <h2 class="section-title">
+                    Invoice
+                    <?= htmlspecialchars($order['invoice_code']) ?>
+                </h2>
+
+                <p>
+                    Status Order :
+                    <span class="status-pill">
+                        <?= htmlspecialchars($order['status']) ?>
+                    </span>
+                </p>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <strong>Pembayaran</strong>
+
+                        <p>
+                            <?= htmlspecialchars($order['payment_method']) ?>
+                            ·
+                            <?= htmlspecialchars($order['payment_status'] ?? '-') ?>
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <strong>Pengiriman</strong>
+
+                        <p>
+                            <?= htmlspecialchars(
+                                ($order['courier'] ?? '-') . ' ' .
+                                ($order['service'] ?? '')
+                            ) ?>
+                            <br>
+
+                            Resi :
+                            <?= htmlspecialchars($order['tracking_number'] ?? '-') ?>
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <strong>Alamat</strong>
+
+                        <p>
+                            <?= htmlspecialchars($order['shipping_address']) ?>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="glass-card p-4">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Produk</th>
+                            <th>Qty</th>
+                            <th>Harga</th>
+                            <th>Subtotal</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <?php foreach ($items as $i): ?>
+
+                            <tr>
+
+                                <td>
+
+                                    <img
+                                        src="../<?= htmlspecialchars($i['image']) ?>"
+                                        width="55"
+                                        alt="<?= htmlspecialchars($i['name']) ?>">
+
+                                    <?= htmlspecialchars($i['name']) ?>
+
+                                </td>
+
+                                <td>
+                                    <?= (int) $i['quantity'] ?>
+                                </td>
+
+                                <td>
+                                    Rp <?= number_format($i['price'], 0, ',', '.') ?>
+                                </td>
+
+                                <td>
+                                    Rp <?= number_format($i['subtotal'], 0, ',', '.') ?>
+                                </td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    </tbody>
+
+                </table>
+
+                <div class="text-right">
+
+                    <p>
+                        Subtotal :
+                        Rp <?= number_format($order['subtotal'], 0, ',', '.') ?>
+                    </p>
+
+                    <p>
+                        Diskon :
+                        Rp <?= number_format($order['discount_amount'], 0, ',', '.') ?>
+                    </p>
+
+                    <p>
+                        Ongkir :
+                        Rp <?= number_format($order['shipping_cost'], 0, ',', '.') ?>
+                    </p>
+
+                    <h4>
+                        Total :
+                        Rp <?= number_format($order['total_amount'], 0, ',', '.') ?>
+                    </h4>
+
+                </div>
+
+                <a
+                    class="btn btn-outline-dark rounded-pill"
+                    href="orders.php">
+
+                    Kembali
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <?php include '../includes/footer.php'; ?>
+
+</body>
+
+</html>

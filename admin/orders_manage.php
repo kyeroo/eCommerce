@@ -1,9 +1,228 @@
-<?php require_once '../config/database.php'; require_once '../includes/session.php'; require_admin();
-if($_SERVER['REQUEST_METHOD']==='POST'){
- $pdo->prepare('UPDATE orders SET status=? WHERE id=?')->execute([$_POST['status'],$_POST['id']]);
- if($_POST['status']==='paid') $pdo->prepare("UPDATE payments SET status='paid', paid_at=NOW() WHERE order_id=?")->execute([$_POST['id']]);
- if($_POST['status']==='shipped') $pdo->prepare("UPDATE shipments SET status='shipped', tracking_number=COALESCE(NULLIF(?,''), tracking_number), shipped_at=NOW() WHERE order_id=?")->execute([$_POST['tracking_number'] ?? '', $_POST['id']]);
+<?php
+
+require_once '../config/database.php';
+require_once '../includes/session.php';
+
+require_admin();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $pdo->prepare(
+        'UPDATE orders
+         SET status = ?
+         WHERE id = ?'
+    )->execute([
+        $_POST['status'],
+        $_POST['id']
+    ]);
+
+    if ($_POST['status'] === 'paid') {
+
+        $pdo->prepare(
+            "UPDATE payments
+             SET status = 'paid',
+                 paid_at = NOW()
+             WHERE order_id = ?"
+        )->execute([
+            $_POST['id']
+        ]);
+    }
+
+    if ($_POST['status'] === 'shipped') {
+
+        $pdo->prepare(
+            "UPDATE shipments
+             SET status = 'shipped',
+                 tracking_number = COALESCE(NULLIF(?, ''), tracking_number),
+                 shipped_at = NOW()
+             WHERE order_id = ?"
+        )->execute([
+            $_POST['tracking_number'] ?? '',
+            $_POST['id']
+        ]);
+    }
 }
-$orders=$pdo->query('SELECT o.*, p.status payment_status, s.status shipment_status, s.tracking_number FROM orders o LEFT JOIN payments p ON p.order_id=o.id LEFT JOIN shipments s ON s.order_id=o.id ORDER BY o.created_at DESC')->fetchAll();
+
+$orders = $pdo->query(
+    'SELECT
+        o.*,
+        p.status AS payment_status,
+        s.status AS shipment_status,
+        s.tracking_number
+     FROM orders o
+     LEFT JOIN payments p
+        ON p.order_id = o.id
+     LEFT JOIN shipments s
+        ON s.order_id = o.id
+     ORDER BY o.created_at DESC'
+)->fetchAll();
+
 ?>
-<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kelola Pesanan</title><link rel="stylesheet" href="../css/bootstrap.css"><link rel="stylesheet" href="../css/liquid-glass.css"><link rel="stylesheet" href="../css/professional.css"><link rel="stylesheet" href="../css/professional.css"></head><body><div class="admin-shell"><aside class="admin-sidebar glass-card"><h4>Admin</h4><a href="dashboard.php">Dashboard</a><a href="products_manage.php">Produk</a><a href="categories_manage.php">Kategori</a><a href="coupons_manage.php">Kupon</a><a href="orders_manage.php">Pesanan</a></aside><main><div class="glass-panel"><h2>Kelola Pesanan</h2><p>Status order terhubung dengan pembayaran dan pengiriman.</p></div><div class="glass-card p-4 mt-4"><div class="table-responsive"><table class="table"><tr><th>Invoice</th><th>Customer</th><th>Total</th><th>Bayar</th><th>Kirim</th><th>Status</th><th>Aksi</th></tr><?php foreach($orders as $o): ?><tr><td><?= htmlspecialchars($o['invoice_code']) ?></td><td><?= htmlspecialchars($o['customer_name']) ?></td><td>Rp <?= number_format($o['total_amount'],0,',','.') ?></td><td><?= htmlspecialchars($o['payment_status'] ?? '-') ?></td><td><?= htmlspecialchars($o['shipment_status'] ?? '-') ?><br><small><?= htmlspecialchars($o['tracking_number'] ?? '') ?></small></td><td><span class="status-pill"><?= $o['status'] ?></span></td><td><form method="post"><input type="hidden" name="id" value="<?= $o['id'] ?>"><select name="status" class="form-control mb-2"><?php foreach(['pending','paid','packed','shipped','completed','cancelled'] as $s): ?><option <?= $o['status']===$s?'selected':'' ?>><?= $s ?></option><?php endforeach; ?></select><input class="form-control mb-2" name="tracking_number" placeholder="No resi"><button class="btn btn-sm btn-danger rounded-pill">Update</button></form></td></tr><?php endforeach; ?></table></div></div></main></div></body></html>
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Kelola Pesanan</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/liquid-glass.css">
+    <link rel="stylesheet" href="../css/professional.css">
+
+</head>
+
+<body>
+
+    <div class="admin-shell">
+
+        <aside class="admin-sidebar glass-card">
+
+            <h4>Admin</h4>
+
+            <a href="dashboard.php">Dashboard</a>
+            <a href="products_manage.php">Produk</a>
+            <a href="categories_manage.php">Kategori</a>
+            <a href="coupons_manage.php">Kupon</a>
+            <a href="orders_manage.php">Pesanan</a>
+
+        </aside>
+
+        <main>
+
+            <div class="glass-panel">
+
+                <h2>Kelola Pesanan</h2>
+
+                <p>
+                    Status order terhubung dengan pembayaran dan pengiriman.
+                </p>
+
+            </div>
+
+            <div class="glass-card p-4 mt-4">
+
+                <div class="table-responsive">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Bayar</th>
+                                <th>Kirim</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <?php foreach ($orders as $o): ?>
+
+                                <tr>
+
+                                    <td>
+                                        <?= htmlspecialchars($o['invoice_code']) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($o['customer_name']) ?>
+                                    </td>
+
+                                    <td>
+                                        Rp <?= number_format($o['total_amount'], 0, ',', '.') ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($o['payment_status'] ?? '-') ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($o['shipment_status'] ?? '-') ?>
+                                        <br>
+                                        <small>
+                                            <?= htmlspecialchars($o['tracking_number'] ?? '') ?>
+                                        </small>
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill">
+                                            <?= htmlspecialchars($o['status']) ?>
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <form method="post">
+
+                                            <input
+                                                type="hidden"
+                                                name="id"
+                                                value="<?= $o['id'] ?>">
+
+                                            <select
+                                                name="status"
+                                                class="form-control mb-2">
+
+                                                <?php foreach ([
+                                                    'pending',
+                                                    'paid',
+                                                    'packed',
+                                                    'shipped',
+                                                    'completed',
+                                                    'cancelled'
+                                                ] as $s): ?>
+
+                                                    <option
+                                                        value="<?= $s ?>"
+                                                        <?= $o['status'] === $s ? 'selected' : '' ?>>
+
+                                                        <?= ucfirst($s) ?>
+
+                                                    </option>
+
+                                                <?php endforeach; ?>
+
+                                            </select>
+
+                                            <input
+                                                class="form-control mb-2"
+                                                name="tracking_number"
+                                                placeholder="No. Resi">
+
+                                            <button
+                                                class="btn btn-sm btn-danger rounded-pill">
+
+                                                Update
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

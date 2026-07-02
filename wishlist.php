@@ -1,149 +1,80 @@
 <?php
-
-require_once 'config/database.php';
-require_once 'includes/session.php';
-
+require_once "config/database.php";
+require_once "includes/session.php";
 require_login();
-
-$stmt = $pdo->prepare(
-    'SELECT
-        p.*,
-        c.name AS category_name
-     FROM wishlists w
-     JOIN products p
-        ON p.id = w.product_id
-     JOIN categories c
-        ON c.id = p.category_id
-     WHERE w.user_id = ?
-     ORDER BY w.created_at DESC'
-);
-
-$stmt->execute([
-    current_user()['id']
-]);
-
+$stmt = $pdo->prepare('SELECT p.*, c.name category_name FROM wishlists w JOIN
+products p ON p.id=w.product_id JOIN categories c ON c.id=p.category_id WHERE
+w.user_id=? ORDER BY w.created_at DESC');
+$stmt->execute([current_user()["id"]]);
 $items = $stmt->fetchAll();
-
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
-<head>
-
-    <meta charset="utf-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1">
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Wishlist</title>
-
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/complex.css">
-    <link rel="stylesheet" href="css/liquid-glass.css">
-    <link rel="stylesheet" href="css/professional.css">
-
-</head>
-
-<body class="sub_page">
-
-    <?php include 'includes/header.php'; ?>
-
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/complex.css" />
+    <link rel="stylesheet" href="css/liquid-glass.css" />
+    <link rel="stylesheet" href="css/professional.css" />
+  </head>
+  <body class="sub_page">
+    <?php include "includes/header.php"; ?>
     <section class="inner_page_head">
-
-        <div class="container">
-
-            <h3>Wishlist Saya</h3>
-
-        </div>
-
+      <div class="container">
+        <h3>Wishlist Saya</h3>
+      </div>
     </section>
-
     <section class="section-pad">
-
-        <div class="container">
-
-            <div class="row">
-
-                <?php foreach ($items as $p): ?>
-
-                    <div class="col-sm-6 col-lg-3 mb-4">
-
-                        <div class="product-card">
-
-                            <img
-                                src="<?= htmlspecialchars($p['image']) ?>"
-                                alt="<?= htmlspecialchars($p['name']) ?>">
-
-                            <small>
-
-                                <?= htmlspecialchars($p['category_name']) ?>
-
-                            </small>
-
-                            <h5>
-
-                                <?= htmlspecialchars($p['name']) ?>
-
-                            </h5>
-
-                            <p class="price">
-
-                                Rp <?= number_format($p['price'], 0, ',', '.') ?>
-
-                            </p>
-
-                            <button
-                                class="btn btn-sm btn-danger rounded-pill"
-                                onclick='addToCart(<?= json_encode([
-                                    "id" => (int) $p["id"],
-                                    "name" => $p["name"],
-                                    "price" => (float) $p["price"],
-                                    "image" => $p["image"]
-                                ]) ?>)'>
-
-                                Keranjang
-
-                            </button>
-
-                            <a
-                                class="btn btn-sm btn-outline-dark rounded-pill"
-                                href="wishlist_action.php?id=<?= (int) $p['id'] ?>">
-
-                                Hapus
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                <?php endforeach; ?>
-
-                <?php if (!$items): ?>
-
-                    <div class="col-12">
-
-                        <div class="glass-panel text-center">
-
-                            Wishlist masih kosong.
-
-                        </div>
-
-                    </div>
-
-                <?php endif; ?>
-
+      <div class="container">
+        <div class="row">
+          <?php
+          foreach ($items as $p): ?>
+          <div class="col-sm-6 col-lg-3 mb-4">
+            <div class="product-card">
+              <img
+                src="<?= htmlspecialchars($p["image"]) ?>
+"
+              />
+              <small> <?= htmlspecialchars($p["category_name"]) ?> </small>
+              <h5><?= htmlspecialchars($p["name"]) ?></h5>
+              <p class="price">
+                Rp <?= number_format($p["price"], 0, ",", ".") ?>
+              </p>
+              <button
+                class="btn btn-sm btn-danger rounded-pill"
+                data-product='<?= htmlspecialchars(
+                    json_encode([
+                        "id" => (int) $p["id"],
+                        "name" => $p["name"],
+                        "price" => (float) $p["price"],
+                        "image" => $p["image"],
+                    ]),
+                    ENT_QUOTES,
+                ) ?>'
+                onclick="addToCart(JSON.parse(this.dataset.product))"
+              >
+                Keranjang
+              </button>
+              <a
+                class="btn btn-sm btn-outline-dark rounded-pill"
+                href="wishlist_action.php?id=<?= (int) $p["id"] ?>"
+                >Hapus</a
+              >
             </div>
-
+          </div>
+          <?php endforeach;
+          if (!$items): ?>
+          <div class="col-12">
+            <div class="glass-panel text-center">Wishlist masih kosong.</div>
+          </div>
+          <?php endif;
+          ?>
         </div>
-
+      </div>
     </section>
-
-    <?php include 'includes/footer.php'; ?>
-
-</body>
-
+    <?php include "includes/footer.php"; ?>
+  </body>
 </html>

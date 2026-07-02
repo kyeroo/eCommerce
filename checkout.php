@@ -1,232 +1,131 @@
 <?php
-
-require_once 'config/database.php';
-require_once 'includes/session.php';
-
+require_once "config/database.php";
+require_once "includes/session.php";
 require_login();
-
 $u = current_user();
-
-$coupons = $pdo->query(
-    "SELECT
-        code,
-        description
-     FROM coupons
-     WHERE is_active = 1
-     ORDER BY code"
-)->fetchAll();
-
+$coupons = $pdo
+    ->query(
+        "SELECT
+code, description FROM coupons WHERE is_active=1 ORDER BY code",
+    )
+    ->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Checkout</title>
-
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/complex.css">
-    <link rel="stylesheet" href="css/liquid-glass.css">
-    <link rel="stylesheet" href="css/professional.css">
-
-</head>
-
-<body class="sub_page">
-
-    <?php include 'includes/header.php'; ?>
-
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/complex.css" />
+    <link rel="stylesheet" href="css/liquid-glass.css" />
+    <link rel="stylesheet" href="css/professional.css" />
+  </head>
+  <body class="sub_page">
+    <?php include "includes/header.php"; ?>
     <section class="inner_page_head">
-
-        <div class="container">
-
-            <h3>Checkout</h3>
-
-        </div>
-
+      <div class="container">
+        <h3>Checkout</h3>
+      </div>
     </section>
-
     <section class="section-pad">
-
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-lg-7 mb-4">
-
-                    <div class="checkout-card p-4">
-
-                        <h4>Data Pengiriman</h4>
-
-                        <form
-                            action="process_order.php"
-                            method="post"
-                            onsubmit="return getCart().length > 0">
-
-                            <input
-                                type="hidden"
-                                name="cart"
-                                id="cartPayload">
-
-                            <div class="form-group">
-
-                                <label>Nama</label>
-
-                                <input
-                                    class="form-control"
-                                    name="customer_name"
-                                    required
-                                    value="<?= htmlspecialchars($u['name']) ?>">
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>Email</label>
-
-                                <input
-                                    class="form-control"
-                                    name="customer_email"
-                                    required
-                                    value="<?= htmlspecialchars($u['email']) ?>">
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>No. HP</label>
-
-                                <input
-                                    class="form-control"
-                                    name="customer_phone"
-                                    required
-                                    value="<?= htmlspecialchars($u['phone'] ?? '') ?>">
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>Alamat</label>
-
-                                <textarea
-                                    class="form-control"
-                                    name="shipping_address"
-                                    required><?= htmlspecialchars($u['address'] ?? '') ?></textarea>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-
-                                        <label>Pembayaran</label>
-
-                                        <select
-                                            class="form-control"
-                                            name="payment_method">
-
-                                            <option value="transfer">
-                                                Transfer Bank
-                                            </option>
-
-                                            <option value="cod">
-                                                COD
-                                            </option>
-
-                                            <option value="ewallet">
-                                                E-Wallet
-                                            </option>
-
-                                        </select>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-
-                                        <label>Kupon</label>
-
-                                        <input
-                                            class="form-control"
-                                            name="coupon_code"
-                                            placeholder="Contoh: DISC10">
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <small class="text-muted d-block mb-3">
-
-                                Kupon aktif:
-
-                                <?php foreach ($coupons as $c): ?>
-
-                                    <strong>
-                                        <?= htmlspecialchars($c['code']) ?>
-                                    </strong>
-
-                                <?php endforeach; ?>
-
-                            </small>
-
-                            <button class="btn-liquid">
-                                Buat Pesanan
-                            </button>
-
-                        </form>
-
-                    </div>
-
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7 mb-4">
+            <div class="checkout-card p-4">
+              <h4>Data Pengiriman</h4>
+              <form
+                action="process_order.php"
+                method="post"
+                onsubmit="return getCart().length > 0;"
+              >
+                <input type="hidden" name="cart" id="cartPayload" />
+                <div class="form-group">
+                  <label>Nama</label>
+                  <input
+                    class="form-control"
+                    name="customer_name"
+                    required
+                    value="<?= htmlspecialchars($u["name"]) ?>
+"
+                  />
                 </div>
-
-                <div class="col-lg-5">
-
-                    <div class="glass-card p-4">
-
-                        <h4>Ringkasan</h4>
-
-                        <div class="glass-table table-responsive">
-
-                            <table class="table">
-
-                                <tbody id="cartBody">
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                        <h5 class="mt-3">
-
-                            Total:
-                            <span id="cartTotal"></span>
-
-                        </h5>
-
-                    </div>
-
+                <div class="form-group">
+                  <label>Email</label>
+                  <input
+                    class="form-control"
+                    name="customer_email"
+                    required
+                    value="<?= htmlspecialchars($u["email"]) ?>
+"
+                  />
                 </div>
-
+                <div class="form-group">
+                  <label>No. HP</label>
+                  <input
+                    class="form-control"
+                    name="customer_phone"
+                    required
+                    value="<?= htmlspecialchars($u["phone"] ?? "") ?>
+"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Alamat</label>
+                  <textarea
+                    class="form-control"
+                    name="shipping_address"
+                    required
+                  >
+<?= htmlspecialchars($u["address"] ?? "") ?>
+</textarea>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Pembayaran</label>
+                      <select class="form-control" name="payment_method">
+                        <option value="transfer">Transfer Bank</option>
+                        <option value="cod">COD</option>
+                        <option value="ewallet">E-Wallet</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Kupon</label>
+                      <input
+                        class="form-control"
+                        name="coupon_code"
+                        placeholder="Contoh: DISC10"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <small class="text-muted d-block mb-3"
+                  >Kupon aktif: <?php foreach ($coupons as $c) {
+                      echo htmlspecialchars($c["code"]) . " ";
+                  } ?>
+                </small>
+                <button class="btn-liquid">Buat Pesanan</button>
+              </form>
             </div>
-
+          </div>
+          <div class="col-lg-5">
+            <div class="glass-card p-4">
+              <h4>Ringkasan</h4>
+              <div class="glass-table table-responsive">
+                <table class="table">
+                  <tbody id="cartBody"></tbody>
+                </table>
+              </div>
+              <h5 class="mt-3">Total: <span id="cartTotal"> </span></h5>
+            </div>
+          </div>
         </div>
-
+      </div>
     </section>
-
-    <?php include 'includes/footer.php'; ?>
-
-</body>
-
+    <?php include "includes/footer.php"; ?>
+  </body>
 </html>

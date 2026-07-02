@@ -1,0 +1,6 @@
+﻿<button
+  class="btn btn-sm btn-primary rounded-pill"
+  onclick='addToCart(<?= htmlspecialchars(json_encode(array("id" => (int) $p["id"], "name" => $p["name"], "price" => (float) $p["price"], "image" => $p["image"])), ENT_QUOTES) ?>)'
+>
+  Masukkan
+</button>

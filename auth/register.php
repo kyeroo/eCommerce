@@ -1,153 +1,95 @@
 <?php
-
-require_once '../config/database.php';
-require_once '../includes/session.php';
-
-$error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    if ($_POST['password'] !== $_POST['confirm_password']) {
-
-        $error = 'Konfirmasi password tidak sama.';
-
+require_once "../config/database.php";
+require_once "../includes/session.php";
+$error = "";
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if ($_POST["password"] !== $_POST["confirm_password"]) {
+        $error = "Konfirmasi password tidak sama.";
     } else {
-
         try {
-
-            $stmt = $pdo->prepare(
-                'INSERT INTO users (name, email, password, phone, address, role)
-                 VALUES (?, ?, ?, ?, ?, "customer")'
-            );
-
+            $stmt = $pdo->prepare('INSERT INTO
+users(name,email,password,phone,address,role) VALUES(?,?,?,?,?,"customer")');
             $stmt->execute([
-                $_POST['name'],
-                $_POST['email'],
-                password_hash($_POST['password'], PASSWORD_BCRYPT),
-                $_POST['phone'],
-                $_POST['address']
+                $_POST["name"],
+                $_POST["email"],
+                password_hash($_POST["password"], PASSWORD_BCRYPT),
+                $_POST["phone"],
+                $_POST["address"],
             ]);
-
-            header('Location: login.php');
-            exit;
-
+            header('Location:
+login.php');
+            exit();
         } catch (Exception $e) {
-
-            $error = 'Email sudah digunakan atau data tidak valid.';
+            $error = 'Email sudah digunakan atau
+data tidak valid.';
         }
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Register</title>
-
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/complex.css">
-    <link rel="stylesheet" href="../css/liquid-glass.css">
-    <link rel="stylesheet" href="../css/professional.css">
-
-</head>
-
-<body class="sub_page">
-
-    <?php include '../includes/header.php'; ?>
-
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/complex.css" />
+    <link rel="stylesheet" href="../css/liquid-glass.css" />
+    <link rel="stylesheet" href="../css/professional.css" />
+    <link rel="stylesheet" href="../css/professional.css" />
+  </head>
+  <body class="sub_page">
+    <?php include "../includes/header.php"; ?>
     <section class="section-pad">
-
-        <div class="container" style="max-width: 680px;">
-
-            <div class="glass-panel">
-
-                <h3 class="section-title">
-                    Daftar Customer
-                </h3>
-
-                <?php if ($error): ?>
-                    <div class="alert alert-danger">
-                        <?= $error ?>
-                    </div>
-                <?php endif; ?>
-
-                <form method="post">
-
-                    <div class="form-group">
-                        <label>Nama</label>
-                        <input
-                            class="form-control"
-                            name="name"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input
-                            class="form-control"
-                            name="email"
-                            type="email"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>No. HP</label>
-                        <input
-                            class="form-control"
-                            name="phone">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Alamat</label>
-                        <textarea
-                            class="form-control"
-                            name="address"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                            class="form-control"
-                            name="password"
-                            type="password"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Konfirmasi Password</label>
-                        <input
-                            class="form-control"
-                            name="confirm_password"
-                            type="password"
-                            required>
-                    </div>
-
-                    <button class="btn-liquid w-100">
-                        Daftar
-                    </button>
-
-                    <p class="mt-3">
-                        <a href="login.php">
-                            Sudah punya akun? Login
-                        </a>
-                    </p>
-
-                </form>
-
+      <div class="container" style="max-width: 680px">
+        <div class="glass-panel">
+          <h3 class="section-title">Daftar Customer</h3>
+          <?php if ($error): ?>
+          <div class="alert alert-danger"><?= $error ?></div>
+          <?php endif; ?>
+          <form method="post">
+            <div class="form-group">
+              <label>Nama</label>
+              <input class="form-control" name="name" required />
             </div>
-
+            <div class="form-group">
+              <label>Email</label>
+              <input class="form-control" name="email" type="email" required />
+            </div>
+            <div class="form-group">
+              <label>No. HP</label>
+              <input class="form-control" name="phone" />
+            </div>
+            <div class="form-group">
+              <label>Alamat</label>
+              <textarea class="form-control" name="address"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                class="form-control"
+                name="password"
+                type="password"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Konfirmasi Password</label>
+              <input
+                class="form-control"
+                name="confirm_password"
+                type="password"
+                required
+              />
+            </div>
+            <button class="btn-liquid w-100">Daftar</button>
+            <p class="mt-3">
+              <a href="login.php">Sudah punya akun? Login</a>
+            </p>
+          </form>
         </div>
-
+      </div>
     </section>
-
-    <?php include '../includes/footer.php'; ?>
-
-</body>
-
+    <?php include "../includes/footer.php"; ?>
+  </body>
 </html>

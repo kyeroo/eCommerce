@@ -8,7 +8,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = $stmt->fetch();
     if ($user && password_verify($_POST["password"], $user["password"])) {
         $_SESSION["user"] = $user;
-        header("Location: ../index.php");
+
+        if (($user["role"] ?? "") === "admin") {
+            header("Location: ../admin/dashboard.php");
+        } else {
+            header("Location: ../index.php");
+        }
+
         exit();
     }
     $error = 'Email

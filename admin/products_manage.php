@@ -29,8 +29,7 @@ VALUES(?,?,?,?,?,?,?,?)');
             isset($_POST["is_featured"]) ? 1 : 0,
         ]);
     }
-    header('Location:
-products_manage.php');
+    header('Location:products_manage.php');
     exit();
 }
 $cats = $pdo

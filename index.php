@@ -15,8 +15,8 @@ COALESCE(AVG(r.rating),0) rating, COUNT(r.id) review_count " .
 JOIN categories c ON c.id=p.category_id " .
             "LEFT JOIN product_reviews r ON
 r.product_id=p.id " .
-            "WHERE p.is_featured=1 GROUP BY p.id ORDER BY p.created_at
-DESC LIMIT 12",
+            "WHERE p.is_featured=1 GROUP BY p.id ORDER BY RAND()
+DESC LIMIT 8",
     )
     ->fetchAll();
 $categories = $pdo
@@ -307,7 +307,7 @@ $stats = [
               <div class="col-sm-6 mb-3">
                 <div class="glass-card metric">
                   <h3><?= $stats["products"] ?></h3>
-                  <p>Produk aktif</p>
+                  <p>Produk Tersedia</p>
                 </div>
               </div>
               <div class="col-sm-6 mb-3">

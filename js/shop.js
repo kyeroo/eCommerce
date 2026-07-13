@@ -1,3 +1,6 @@
+let currentPage = 1;
+const itemsPerPage = 10;
+
 function getCart(){ 
     return JSON.parse(localStorage.getItem('cart') || '[]'); 
 }
@@ -43,35 +46,183 @@ function rupiah(n){
     return 'Rp ' + Number(n).toLocaleString('id-ID'); 
 }
 
-function renderCart(){ 
-    const body=document.getElementById('cartBody'); 
-    const totalEl=document.getElementById('cartTotal'); 
-    const input=document.getElementById('cartPayload'); 
-    
-    if(!body) return; 
-    const cart=getCart(); let total=0; 
-    body.innerHTML=''; 
-    cart.forEach(item=>{ const sub=item.price*item.qty; total+=sub; 
+function renderCart() {
+    const body = document.getElementById('cartBody');
+    const totalEl = document.getElementById('cartTotal');
+    const input = document.getElementById('cartPayload');
+    const summaryItems = document.getElementById("summaryItems");
+
+    summaryItems.innerHTML = "";
+    let subtotal = 0;
+
+    if (!body) return;
+
+    const cart = getCart();
+    let total = 0;
+
+    body.innerHTML = '';
+
+    // Hitung total semua item
+    cart.forEach(item => {
+        total += item.price * item.qty;
+    });
+
+    cart.forEach(item=>{
+
+    const sub = item.price * item.qty;
+
+    subtotal += sub;
+
+    summaryItems.innerHTML += `
+
+    <div class="summary-item">
+
+        <span class="name">
+
+            ${item.name} × ${item.qty}
+
+        </span>
+
+        <span class="price">
+
+            ${rupiah(sub)}
+
+        </span>
+
+    </div>
+
+    `;
+
+});
+
+document.getElementById("summarySubtotal").textContent = rupiah(subtotal);
+
+document.getElementById("cartTotal").textContent = rupiah(subtotal);
+
+    // Pagination
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageItems = cart.slice(start, end);
+
+    pageItems.forEach(item => {
+        const sub = item.price * item.qty;
+
         body.innerHTML += `
+        <div class="cart-item">
+
+            <img src="${item.image}" class="cart-image">
+
+            <div class="cart-content">
+
+                <h5>${item.name}</h5>
+
+                <p>${rupiah(item.price)}</p>
+
+                <div class="cart-footer">
+
+                    <div class="qty-control">
+
+                        <button onclick="changeQty(${item.id},${item.qty-1})">
+
+                            -
+
+                        </button>
+
+                        <span>${item.qty}</span>
+
+                        <button onclick="changeQty(${item.id},${item.qty+1})">
+
+                            +
+
+                        </button>
+
+                    </div>
+
+                    <div>
+
+                        <h5>${rupiah(sub)}</h5>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button class="delete-btn"
+                onclick="removeCart(${item.id})">
+
+                <i class="bi bi-trash"></i>
+
+            </button>
+
+        </div>`;
+    });
+
+    if (cart.length === 0) {
+        body.innerHTML = `
         <tr>
-            <td>
-                <img src="${item.image}" width="55"> ${item.name}
+            <td colspan="5" class="text-center">
+                Keranjang masih kosong.
             </td>
-            <td>${rupiah(item.price)}</td>
-            <td><input class="form-control" type="number" value="${item.qty}" min="1" onchange="changeQty(${item.id},this.value)"></td>
-            <td>${rupiah(sub)}</td>
-            <td>
-                <button class="btn btn-sm btn-danger" onclick="removeCart(${item.id})">Hapus</button>
-                </td>
-        </tr>`; 
-    }); 
-        
-        if(cart.length===0) body.innerHTML='<tr><td colspan="5" class="text-center">Keranjang masih kosong.</td></tr>'; 
-        
-        if(totalEl) totalEl.textContent=rupiah(total); 
-        
-        if(input) input.value=JSON.stringify(cart); 
+        </tr>`;
     }
+
+    if (totalEl) totalEl.textContent = rupiah(total);
+
+    if (input) input.value = JSON.stringify(cart);
+
+    renderPagination(cart.length);
+}
+
+function renderPagination(totalItems) {
+    const pagination = document.getElementById('cartPagination');
+    if (!pagination) return;
+
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+    }
+
+    let html = `<div class="pagination-modern">`;
+
+    html += `
+        <button
+            class="pagination-arrow"
+            ${currentPage === 1 ? 'disabled' : ''}
+            onclick="changePage(${currentPage - 1})">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+    `;
+
+    for (let i = 1; i <= totalPages; i++) {
+        html += `
+            <button
+                class="pagination-btn ${currentPage === i ? 'active' : ''}"
+                onclick="changePage(${i})">
+                ${i}
+            </button>
+        `;
+    }
+
+    html += `
+        <button
+            class="pagination-arrow"
+            ${currentPage === totalPages ? 'disabled' : ''}
+            onclick="changePage(${currentPage + 1})">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    `;
+
+    html += `</div>`;
+
+    pagination.innerHTML = html;
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderCart();
+}
 
 document.addEventListener('DOMContentLoaded',()=>{ updateCartCount(); 
     renderCart(); });

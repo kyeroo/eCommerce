@@ -2,6 +2,9 @@
 $folder = basename(dirname($_SERVER["PHP_SELF"] ?? ""));
 $prefix = in_array($folder, ["admin", "auth", "customer"], true) ? "../" : "";
 ?>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 <footer class="footer_section mt-5">
 <div class="container footer-grid">
 <p>&copy; <?= date("Y") ?>
@@ -17,5 +20,7 @@ Famms Store. Fashion modern dengan pengalaman belanja yang rapi dan nyaman.</p>
 <script src="<?= $prefix ?>js/popper.min.js"></script>
 <script src="<?= $prefix ?>js/bootstrap.js"></script>
 <script src="<?= $prefix ?>js/shop.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 </html>

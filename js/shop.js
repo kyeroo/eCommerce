@@ -19,6 +19,29 @@ function updateCartCount(){
 }
 
 function addToCart(product){ 
+     if(!isLoggedIn){
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Diperlukan",
+            html: `
+                Untuk menambahkan produk ke keranjang,
+                silakan login terlebih dahulu.
+            `,
+            confirmButtonText: "Login Sekarang",
+            showCancelButton: true,
+            cancelButtonText: "Batal",
+            confirmButtonColor:"#2563eb"
+        }).then((result)=>{
+            if(result.isConfirmed){
+                window.location.href="auth/login.php";
+            }
+        });
+
+        return;
+    }
+
+
     const cart=getCart(); const idx=cart.findIndex(i=>i.id===product.id); 
     
     if(idx>=0){ 

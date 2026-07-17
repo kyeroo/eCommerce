@@ -124,3 +124,7 @@ function active_nav($file, $current)
     </nav>
   </div>
 </header>
+
+<script>
+const isLoggedIn = <?= isset($_SESSION['user']) ? 'true' : 'false' ?>;
+</script>

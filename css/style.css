@@ -1674,6 +1674,233 @@ font-size:14px;
 
 }
 
+.login-required{
+
+    min-height:65vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.login-card{
+
+    width:100%;
+    max-width:520px;
+
+    background:#fff;
+
+    border:1px solid #ececec;
+
+    border-radius:24px;
+
+    padding:50px 40px;
+
+    text-align:center;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.05);
+
+}
+
+.login-icon{
+
+    width:90px;
+    height:90px;
+
+    margin:auto auto 24px;
+
+    border-radius:50%;
+
+    background:#f3f4f6;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:42px;
+
+    color:#2563eb;
+
+}
+
+.login-card h2{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.login-card p{
+
+    color:#6b7280;
+
+    line-height:1.7;
+
+    margin-bottom:35px;
+
+}
+
+.login-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+}
+
+.btn-login{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:13px 30px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-login:hover{
+
+    background:#1d4ed8;
+
+    color:white;
+
+}
+
+.btn-outline-shop{
+
+    border:1px solid #d1d5db;
+
+    color:#374151;
+
+    padding:13px 30px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-outline-shop:hover{
+
+    background:#f8fafc;
+
+    color:#111827;
+
+}
+
+.empty-cart{
+
+    min-height:65vh;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:40px;
+
+}
+
+.empty-cart-icon{
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    background:#f8fafc;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:54px;
+
+    color:#2563eb;
+
+    margin-bottom:30px;
+
+}
+
+.empty-cart h2{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+.empty-cart p{
+
+    max-width:420px;
+
+    color:#6b7280;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+}
+
+.btn-shop-now{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-shop-now:hover{
+
+    background:#1d4ed8;
+
+    color:white;
+
+    transform:translateY(-2px);
+
+}
+
 http://kute-themes.com/html/boutique/html/index.html
 https://template.hasthemes.com/noraure/noraure/index.html
 https://preview.hasthemes.com/xoss-preview/xoss/index.html

@@ -70,18 +70,35 @@ function rupiah(n){
 }
 
 function renderCart() {
-    const body = document.getElementById('cartBody');
+    const body = document.getElementById("cartBody");
+    const emptyCart = document.getElementById("emptyCart");
+    const cartLayout = document.getElementById("cartLayout");
+
+    
     const totalEl = document.getElementById('cartTotal');
     const input = document.getElementById('cartPayload');
     const summaryItems = document.getElementById("summaryItems");
+    const cart = getCart();
 
     summaryItems.innerHTML = "";
     let subtotal = 0;
 
     if (!body) return;
 
-    const cart = getCart();
     let total = 0;
+
+    // Jika cart kosong
+    if (cart.length === 0) {
+
+        if (emptyCart) emptyCart.style.display = "flex";
+        if (cartLayout) cartLayout.style.display = "none";
+
+        return;
+    }
+
+    // Jika cart ada isinya
+    if (emptyCart) emptyCart.style.display = "none";
+    if (cartLayout) cartLayout.style.display = "grid";
 
     body.innerHTML = '';
 

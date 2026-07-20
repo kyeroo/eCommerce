@@ -333,6 +333,7 @@ $stats = [
         </div>
       </div>
     </section>
+    <?php if (!is_logged_in()) { ?>
     <section class="section-pad pt-0">
       <div class="container">
         <div class="newsletter-box">
@@ -357,6 +358,7 @@ $stats = [
         </div>
       </div>
     </section>
+    <?php }?>
     <?php include "includes/footer.php"; ?>
   </body>
 </html>

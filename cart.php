@@ -22,88 +22,167 @@ require_once "includes/session.php";
 
 <?php include "includes/header.php"; ?>
 
-<section class="inner_page_head mt-5">
-    <div class="container pt-2">
+<?php if(isset($_SESSION['user'])) { ?>
+<section class="inner_page_head">
+    <div class="container">
         <h3 class="fw-bold">Keranjang Belanja</h3>
         <p class="text-muted mb-0">Periksa kembali produk sebelum checkout.</p>
     </div>
 </section>
+<?php } ?>
 
 <section class="cart-section">
 
     <div class="container">
 
-        <div class="cart-layout">
+<?php if (isset($_SESSION['user'])): ?>
 
-            <!-- LIST PRODUK -->
-            <div>
+    <!-- Empty Cart -->
+    <div id="emptyCart" class="empty-cart" style="display:none;">
 
-                <div id="cartBody"></div>
+        <div class="empty-cart-icon">
+            <i class="bi bi-cart-x"></i>
+        </div>
 
-                <div id="cartPagination" class="mt-4"></div>
+        <h2>Keranjangmu masih kosong</h2>
+
+        <p>
+            Belum ada produk yang ditambahkan ke keranjang.
+            Yuk mulai belanja sekarang!
+        </p>
+
+        <a href="index.php" class="btn-shop-now">
+            <i class="bi bi-bag"></i>
+            Mulai Belanja
+        </a>
+
+    </div>
+
+    <!-- Cart Layout -->
+    <div id="cartLayout" class="cart-layout">
+
+        <!-- Product List -->
+        <div>
+
+            <div id="cartBody"></div>
+
+            <div id="cartPagination" class="mt-4"></div>
+
+        </div>
+
+        <!-- Summary -->
+        <aside class="cart-summary">
+
+            <h5>Ringkasan Belanja</h5>
+
+            <div id="summaryItems" class="summary-items"></div>
+
+            <div class="summary-divider"></div>
+
+            <div class="coupon-label">
+                Punya kode kupon?
+            </div>
+
+            <div class="coupon-box">
+
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Masukkan kode kupon">
+
+                <button class="coupon-btn">
+                    Pakai
+                </button>
 
             </div>
 
-            <!-- SIDEBAR -->
-            <aside class="cart-summary">
+            <div class="summary-divider"></div>
 
-              <h5>Ringkasan Belanja</h5>
+            <div class="summary-row">
 
-              <div id="summaryItems" class="summary-items"></div>
+                <span>Subtotal</span>
 
-              <div class="summary-divider"></div>
+                <span id="summarySubtotal">
+                    Rp0
+                </span>
 
-              <div class="coupon-label">
-                  Punya kode kupon?
-              </div>
+            </div>
 
-              <div class="coupon-box">
-                  <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Masukkan kode">
-                  <button class="coupon-btn">
-                      Pakai
-                  </button>
-              </div>
+            <div class="summary-row">
 
-              <div class="summary-divider"></div>
+                <span>Diskon</span>
 
-              <div class="summary-row">
-                  <span>Subtotal</span>
-                  <span id="summarySubtotal">Rp0</span>
-              </div>
+                <span id="summaryDiscount">
+                    -Rp0
+                </span>
 
-              <div class="summary-row">
-                  <span>Diskon</span>
-                  <span id="summaryDiscount">-Rp0</span>
-              </div>
+            </div>
 
-              <div class="summary-row">
-                  <span>Ongkir</span>
-                  <span class="text-success fw-semibold">Gratis</span>
-              </div>
+            <div class="summary-row">
 
-              <div class="summary-divider"></div>
+                <span>Ongkir</span>
 
-              <div class="summary-total">
-                  <span class="label">Total</span>
-                  <span class="value" id="cartTotal">Rp0</span>
-              </div>
+                <span class="text-success fw-semibold">
+                    Gratis
+                </span>
 
-              <a href="checkout.php" class="checkout-btn">
-                  Lanjut Checkout
-              </a>
+            </div>
 
-              <div class="summary-footer">
-                  🔒 Pembayaran aman & terenkripsi
-              </div>
+            <div class="summary-divider"></div>
 
-          </aside>
+            <div class="summary-total">
+
+                <span class="label">
+                    Total
+                </span>
+
+                <span class="value" id="cartTotal">
+                    Rp0
+                </span>
+
+            </div>
+
+            <a href="checkout.php" class="checkout-btn">
+                Lanjut Checkout
+            </a>
+
+        </aside>
+
+    </div>
+
+<?php else: ?>
+
+    <!-- Login Required -->
+    <div class="login-required">
+
+        <div class="login-card">
+
+            <div class="login-icon">
+                <i class="bi bi-cart3"></i>
+            </div>
+
+            <h2>Login untuk Melihat Keranjang</h2>
+
+            <p>
+                Masuk ke akunmu agar dapat menyimpan produk,
+                mengelola keranjang, dan melanjutkan checkout.
+            </p>
+
+            <div class="login-actions">
+
+                <a href="auth/login.php" class="btn-login">
+                    Login
+                </a>
+
+            </div>
 
         </div>
 
     </div>
+
+<?php endif; ?>
+
+</div>
 
 </section>
 

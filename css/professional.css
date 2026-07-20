@@ -23,11 +23,18 @@ body{
   font-family:'Inter','Segoe UI',Arial,sans-serif!important;
   color:var(--navy);
   background:radial-gradient(circle at 8% 10%,rgba(244,63,94,.14),transparent 22%),radial-gradient(circle at 92% 42%,rgba(37,99,235,.14),transparent 25%),linear-gradient(135deg,#fff7fb 0%,#f8fbff 48%,#edf6ff 100%);
-  background-attachment:fixed;min-height:100vh
+  background-attachment:fixed;
+  min-height:100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container{
   max-width:1320px
+}
+
+.page-content {
+    flex: 1;
 }
 
 .glass-navbar{

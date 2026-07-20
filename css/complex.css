@@ -1,2 +1,99 @@
-.complex-header{background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.06)}
-.shop-hero{background:linear-gradient(135deg,#f7f1f0,#fff);padding:80px 0}.shop-hero h1{font-weight:800;font-size:48px}.shop-hero span{color:#f7444e}.feature-card,.stat-card,.checkout-card{border:1px solid #eee;border-radius:16px;padding:22px;background:#fff;box-shadow:0 10px 25px rgba(0,0,0,.05)}.product-card{border:1px solid #eee;border-radius:16px;padding:18px;height:100%;background:#fff;transition:.2s}.product-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.08)}.product-card img{height:210px;object-fit:contain;width:100%}.price{font-weight:700;color:#f7444e}.badge-soft{background:#fff0f1;color:#f7444e;padding:6px 10px;border-radius:20px}.table td,.table th{vertical-align:middle}.admin-card{border-radius:14px;padding:22px;color:#fff}.admin-card h3{font-weight:800}.bg-red{background:#f7444e}.bg-darkx{background:#222}.bg-green{background:#28a745}.bg-blue{background:#007bff}
+.complex-header{
+    background:#fff;
+    box-shadow:0 4px 18px rgba(0,0,0,.06);
+}
+
+.shop-hero{
+    background:linear-gradient(135deg,#f7f1f0,#fff);
+    padding:80px 0
+}
+
+.shop-hero h1{
+font-weight:800;
+font-size:48px
+}
+
+.shop-hero span{
+    color:#f7444e
+}
+
+.feature-card,
+.stat-card,
+.checkout-card{
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:22px;
+    background:#fff;
+    box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+.product-card{
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:18px;
+    height:100%;
+    background:#fff;
+    transition:.2s;
+    -webkit-border-radius:16px;
+    -moz-border-radius:16px;
+    -ms-border-radius:16px;
+    -o-border-radius:16px;
+}
+
+.product-card:hover{ 
+    transform:translateY(-3px); 
+    box-shadow:0 12px 30px rgba(0,0,0,.08); 
+    -webkit-transform:translateY(-3px); 
+    -moz-transform:translateY(-3px); 
+    -ms-transform:translateY(-3px); 
+    -o-transform:translateY(-3px); 
+}
+
+.product-card img{
+    height:210px;
+    object-fit:contain;
+    width:100%
+}
+
+.price{
+    font-weight:700;
+    color:#f7444e;
+}
+
+.badge-soft{
+    background:#fff0f1;
+    color:#f7444e;
+    padding:6px 10px;
+    border-radius:20px;
+}
+
+.table td,
+.table th{
+    vertical-align:middle
+    }
+    
+.admin-card{
+    border-radius:14px;
+    padding:22px;
+    color:#fff;
+}
+
+.admin-card h3{
+    font-weight:800;
+}
+
+.bg-red{
+    background:#f7444e
+}
+
+.bg-darkx{
+    background:#222;
+}
+
+.bg-green{
+    background:#28a745;
+}
+
+.bg-blue{
+    background:#007bff;
+}

@@ -22,59 +22,60 @@ $items = $stmt->fetchAll();
   </head>
   <body class="sub_page">
     <?php include "includes/header.php"; ?>
-    <section class="inner_page_head">
-      <div class="container">
-        <h3>Wishlist Saya</h3>
-      </div>
-    </section>
-    <section class="section-pad">
-      <div class="container">
-        <div class="row">
-          <?php
-          foreach ($items as $p): ?>
-          <div class="col-sm-6 col-lg-3 mb-4">
-            <div class="product-card">
-              <img
-                src="<?= htmlspecialchars($p["image"]) ?>
-"
-              />
-              <small> <?= htmlspecialchars($p["category_name"]) ?> </small>
-              <h5><?= htmlspecialchars($p["name"]) ?></h5>
-              <p class="price">
-                Rp <?= number_format($p["price"], 0, ",", ".") ?>
-              </p>
-              <button
-                class="btn btn-sm btn-danger rounded-pill"
-                data-product='<?= htmlspecialchars(
-                    json_encode([
-                        "id" => (int) $p["id"],
-                        "name" => $p["name"],
-                        "price" => (float) $p["price"],
-                        "image" => $p["image"],
-                    ]),
-                    ENT_QUOTES,
-                ) ?>'
-                onclick="addToCart(JSON.parse(this.dataset.product))"
-              >
-                Keranjang
-              </button>
-              <a
-                class="btn btn-sm btn-outline-dark rounded-pill"
-                href="wishlist_action.php?id=<?= (int) $p["id"] ?>"
-                >Hapus</a
-              >
-            </div>
-          </div>
-          <?php endforeach;
-          if (!$items): ?>
-          <div class="col-12">
-            <div class="glass-panel text-center">Wishlist masih kosong.</div>
-          </div>
-          <?php endif;
-          ?>
+    <div class="page-content">
+      <section class="inner_page_head">
+        <div class="container">
+          <h3>Wishlist Saya</h3>
         </div>
-      </div>
-    </section>
+      </section>
+      <section class="section-pad">
+        <div class="container">
+          <div class="row">
+            <?php
+            foreach ($items as $p): ?>
+            <div class="col-sm-6 col-lg-3 mb-4">
+              <div class="product-card">
+                <img
+                  src="<?= htmlspecialchars($p["image"]) ?>"
+                />
+                <small> <?= htmlspecialchars($p["category_name"]) ?> </small>
+                <h5><?= htmlspecialchars($p["name"]) ?></h5>
+                <p class="price">
+                  Rp <?= number_format($p["price"], 0, ",", ".") ?>
+                </p>
+                <button
+                  class="btn btn-sm btn-danger rounded-pill"
+                  data-product='<?= htmlspecialchars(
+                      json_encode([
+                          "id" => (int) $p["id"],
+                          "name" => $p["name"],
+                          "price" => (float) $p["price"],
+                          "image" => $p["image"],
+                      ]),
+                      ENT_QUOTES,
+                  ) ?>'
+                  onclick="addToCart(JSON.parse(this.dataset.product))"
+                >
+                  Keranjang
+                </button>
+                <a
+                  class="btn btn-sm btn-outline-dark rounded-pill"
+                  href="wishlist_action.php?id=<?= (int) $p["id"] ?>"
+                  >Hapus</a
+                >
+              </div>
+            </div>
+            <?php endforeach;
+            if (!$items): ?>
+            <div class="col-12">
+              <div class="glass-panel text-center">Wishlist masih kosong.</div>
+            </div>
+            <?php endif;
+            ?>
+          </div>
+        </div>
+      </section>
+    </div>
     <?php include "includes/footer.php"; ?>
   </body>
 </html>

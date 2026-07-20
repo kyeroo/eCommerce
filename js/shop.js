@@ -51,7 +51,24 @@ function addToCart(product){
     } 
     
     saveCart(cart); 
-    alert('Produk masuk ke keranjang.'); 
+    Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Produk berhasil ditambahkan!",
+        html: `
+            <div style="font-size:15px;color:#6b7280">
+                Produk telah masuk ke keranjang belanja.
+            </div>
+        `,
+        showConfirmButton: false,
+        timer: 2200,
+        timerProgressBar: true,
+        customClass:{
+            popup:"cart-toast",
+            title:"cart-toast-title"
+        }
+    });
 }
 
 function removeCart(id){ 
@@ -80,7 +97,9 @@ function renderCart() {
     const summaryItems = document.getElementById("summaryItems");
     const cart = getCart();
 
-    summaryItems.innerHTML = "";
+    if (summaryItems) {
+        summaryItems.innerHTML = "";
+    }
     let subtotal = 0;
 
     if (!body) return;

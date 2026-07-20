@@ -64,7 +64,7 @@ function active_nav($file, $current)
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= $prefix ?>customer/orders.php"
+            <a class="nav-link<?= active_nav("orders.php", $current) ?>" href="<?= $prefix ?>customer/orders.php"
               >Transaksi</a
             >
           </li>

@@ -30,53 +30,50 @@ profile.php?saved=1');
   </head>
   <body class="sub_page">
     <?php include "includes/header.php"; ?>
-    <section class="section-pad">
-      <div class="container">
-        <div class="glass-panel">
-          <h2 class="section-title">Profil Pelanggan</h2>
-          <?php if (isset($_GET["saved"])): ?>
-          <div class="alert alert-success">Profil berhasil diperbarui.</div>
-          <?php endif; ?>
-          <form method="post">
-            <div class="form-group">
-              <label>Nama</label>
-              <input
-                class="form-control"
-                name="name"
-                value="<?= htmlspecialchars($u["name"]) ?>
-"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input
-                class="form-control"
-                value="<?= htmlspecialchars($u["email"]) ?>
-"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label>No. HP</label>
-              <input
-                class="form-control"
-                name="phone"
-                value="<?= htmlspecialchars($u["phone"] ?? "") ?>
-"
-              />
-            </div>
-            <div class="form-group">
-              <label>Alamat Utama</label>
-              <textarea class="form-control" name="address">
-<?= htmlspecialchars($u["address"] ?? "") ?>
-</textarea>
-            </div>
-            <button class="btn-liquid">Simpan Profil</button>
-          </form>
+    <div class="page-content">
+      <section class="section-pad">
+        <div class="container">
+          <div class="glass-panel">
+            <h2 class="section-title">Profil Pelanggan</h2>
+            <?php if (isset($_GET["saved"])): ?>
+            <div class="alert alert-success">Profil berhasil diperbarui.</div>
+            <?php endif; ?>
+            <form method="post">
+              <div class="form-group">
+                <label>Nama</label>
+                <input
+                  class="form-control"
+                  name="name"
+                  value="<?= htmlspecialchars($u["name"]) ?>"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input
+                  class="form-control"
+                  value="<?= htmlspecialchars($u["email"]) ?>"
+                  disabled
+                />
+              </div>
+              <div class="form-group">
+                <label>No. HP</label>
+                <input
+                  class="form-control"
+                  name="phone"
+                  value="<?= htmlspecialchars($u["phone"] ?? "") ?>"
+                />
+              </div>
+              <div class="form-group">
+                <label>Alamat Utama</label>
+                <textarea class="form-control" name="address"><?= htmlspecialchars($u["address"] ?? "") ?></textarea>
+              </div>
+              <button class="btn-liquid">Simpan Profil</button>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
     <?php include "includes/footer.php"; ?>
   </body>
 </html>

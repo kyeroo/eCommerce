@@ -35,36 +35,38 @@ atau password salah.';
   </head>
   <body class="sub_page">
     <?php include "../includes/header.php"; ?>
-    <section class="section-pad">
-      <div class="container" style="max-width: 560px">
-        <div class="glass-panel">
-          <h3 class="section-title">Login</h3>
-          <?php if ($error): ?>
-          <div class="alert alert-danger"><?= $error ?></div>
-          <?php endif; ?>
-          <form method="post">
-            <div class="form-group">
-              <label>Email</label>
-              <input class="form-control" name="email" type="email" required />
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input
-                class="form-control"
-                name="password"
-                type="password"
-                required
-              />
-            </div>
-            <button class="btn-liquid w-100">Login</button>
-            <p class="mt-3">
-              Belum punya akun? <a href="register.php">Daftar</a>
-            </p>
-            <small>Demo admin: admin@famms.test / password</small>
-          </form>
+    <div class="page-content">
+      <section class="section-pad">
+        <div class="container" style="max-width: 560px">
+          <div class="glass-panel">
+            <h3 class="section-title">Login</h3>
+            <?php if ($error): ?>
+            <div class="alert alert-danger"><?= $error ?></div>
+            <?php endif; ?>
+            <form method="post">
+              <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" name="email" type="email" required />
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  class="form-control"
+                  name="password"
+                  type="password"
+                  required
+                />
+              </div>
+              <button class="btn-liquid w-100">Login</button>
+              <p class="mt-3">
+                Belum punya akun? <a href="register.php">Daftar</a>
+              </p>
+              <small>Demo admin: admin@famms.test / password</small>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
     <?php include "../includes/footer.php"; ?>
   </body>
 </html>

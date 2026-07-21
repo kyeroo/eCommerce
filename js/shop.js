@@ -90,144 +90,85 @@ function renderCart() {
     const body = document.getElementById("cartBody");
     const emptyCart = document.getElementById("emptyCart");
     const cartLayout = document.getElementById("cartLayout");
-
-    
     const totalEl = document.getElementById('cartTotal');
     const input = document.getElementById('cartPayload');
     const summaryItems = document.getElementById("summaryItems");
-    const cart = getCart();
-
-    if (summaryItems) {
-        summaryItems.innerHTML = "";
-    }
-    let subtotal = 0;
+    const summarySubtotal = document.getElementById("summarySubtotal");
 
     if (!body) return;
 
-    let total = 0;
+    const cart = getCart() || [];
 
-    // Jika cart kosong
+    // Handling jika keranjang kosong
     if (cart.length === 0) {
-
         if (emptyCart) emptyCart.style.display = "flex";
         if (cartLayout) cartLayout.style.display = "none";
-
         return;
     }
 
-    // Jika cart ada isinya
+    // Handling jika ada isi
     if (emptyCart) emptyCart.style.display = "none";
     if (cartLayout) cartLayout.style.display = "grid";
 
     body.innerHTML = '';
+    if (summaryItems) summaryItems.innerHTML = '';
 
-    // Hitung total semua item
+    let subtotal = 0;
+
+    // Render ringkasan & hitung total
     cart.forEach(item => {
-        total += item.price * item.qty;
+        const sub = item.price * item.qty;
+        subtotal += sub;
+
+        if (summaryItems) {
+            summaryItems.innerHTML += `
+                <div class="summary-item">
+                    <span>${item.name}</span>
+                    <span>${rupiah(sub)}</span>
+                </div>
+            `;
+        }
     });
 
-    cart.forEach(item=>{
+    // Update total harga ke DOM
+    const formattedTotal = rupiah(subtotal);
+    if (summarySubtotal) summarySubtotal.textContent = formattedTotal;
+    if (totalEl) totalEl.textContent = formattedTotal;
+    if (input) input.value = JSON.stringify(cart);
 
-    const sub = item.price * item.qty;
-
-    subtotal += sub;
-
-    summaryItems.innerHTML += `
-
-    <div class="summary-item">
-
-        <span class="name">
-
-            ${item.name} × ${item.qty}
-
-        </span>
-
-        <span class="price">
-
-            ${rupiah(sub)}
-
-        </span>
-
-    </div>
-
-    `;
-
-});
-
-document.getElementById("summarySubtotal").textContent = rupiah(subtotal);
-
-document.getElementById("cartTotal").textContent = rupiah(subtotal);
-
-    // Pagination
+    // Pagination & Render item keranjang
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const pageItems = cart.slice(start, end);
 
     pageItems.forEach(item => {
         const sub = item.price * item.qty;
+        
+        // Memastikan ID dibungkus kutip jika berbentuk string
+        const itemIdParam = typeof item.id === 'string' ? `'${item.id}'` : item.id;
 
         body.innerHTML += `
         <div class="cart-item">
-
             <img src="${item.image}" class="cart-image">
-
             <div class="cart-content">
-
                 <h5>${item.name}</h5>
-
                 <p>${rupiah(item.price)}</p>
-
                 <div class="cart-footer">
-
                     <div class="qty-control">
-
-                        <button onclick="changeQty(${item.id},${item.qty-1})">
-
-                            -
-
-                        </button>
-
+                        <button onclick="changeQty(${itemIdParam}, ${item.qty - 1})">-</button>
                         <span>${item.qty}</span>
-
-                        <button onclick="changeQty(${item.id},${item.qty+1})">
-
-                            +
-
-                        </button>
-
+                        <button onclick="changeQty(${itemIdParam}, ${item.qty + 1})">+</button>
                     </div>
-
                     <div>
-
                         <h5>${rupiah(sub)}</h5>
                     </div>
-
                 </div>
-
             </div>
-
-            <button class="delete-btn"
-                onclick="removeCart(${item.id})">
-
+            <button class="delete-btn" onclick="removeCart(${itemIdParam})">
                 <i class="bi bi-trash"></i>
-
             </button>
-
         </div>`;
     });
-
-    if (cart.length === 0) {
-        body.innerHTML = `
-        <tr>
-            <td colspan="5" class="text-center">
-                Keranjang masih kosong.
-            </td>
-        </tr>`;
-    }
-
-    if (totalEl) totalEl.textContent = rupiah(total);
-
-    if (input) input.value = JSON.stringify(cart);
 
     renderPagination(cart.length);
 }

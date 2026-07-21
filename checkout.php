@@ -115,12 +115,20 @@ code, description FROM coupons WHERE is_active=1 ORDER BY code",
           <div class="col-lg-5">
             <div class="glass-card p-4">
               <h4>Ringkasan</h4>
-              <div class="glass-table table-responsive">
-                <table class="table">
-                  <tbody id="cartBody"></tbody>
-                </table>
+              <div id="cartBody" style="display: none;"></div>
+              <div id="summaryItems"></div>
+
+              <hr>
+
+              <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span id="summarySubtotal">Rp0</span>
               </div>
-              <h5 class="mt-3">Total: <span id="cartTotal"> </span></h5>
+
+              <div class="summary-row total">
+                  <span>Total</span>
+                  <span id="cartTotal">Rp0</span>
+              </div>
             </div>
           </div>
         </div>
